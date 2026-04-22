@@ -12,9 +12,12 @@ def get_add_transaction_view(page: ft.Page, user_name="User", on_saved=None):
     TEXT_DIM     = "#6b9e7e"
 
     db_config = {
-        "host": "localhost", "user": "root",
-        "password": "venera123!@ZX", "database": "money_tracker_v2",
-    }
+    "host":     "mysql.railway.internal",
+    "user":     "root",
+    "password": "FVmxLAOaqcNqRodWzphRlFoRnmWrsdwq",
+    "database": "railway",
+    "port":     3306,
+}
 
     def load_categories():
         try:

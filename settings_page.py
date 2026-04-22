@@ -12,8 +12,11 @@ def get_settings_view(page: ft.Page, user_name="User", on_logout=None):
     TEXT_DIM     = "#6b9e7e"
 
     db_config = {
-        "host": "localhost", "user": "root",
-        "password": "venera123!@ZX", "database": "money_tracker_v2",
+        "host":     "mysql.railway.internal",
+        "user":     "root",
+        "password": "FVmxLAOaqcNqRodWzphRlFoRnmWrsdwq",
+        "database": "railway",
+        "port":     3306,
     }
 
     def load_user():
@@ -32,7 +35,6 @@ def get_settings_view(page: ft.Page, user_name="User", on_logout=None):
 
     status_text = ft.Text("", color=TEXT_DIM, size=12)
 
-    # ── Change password ───────────────────────────────────────────────────────
     current_pw  = ft.TextField(label="Current Password", password=True, can_reveal_password=True,
                                border_color=BORDER_COLOR, focused_border_color=PRIMARY,
                                color="white", label_style=ft.TextStyle(color=TEXT_DIM),
@@ -197,7 +199,7 @@ def get_settings_view(page: ft.Page, user_name="User", on_logout=None):
                         ]),
 
                         section_card("Notifications", ft.icons.NOTIFICATIONS_OUTLINED, [
-                            ft.Text("System notifications when budget is ≥85% used",
+                            ft.Text("System notifications when budget is >=85% used",
                                     color=TEXT_DIM, size=12),
                             notif_switch,
                             login_notif_switch,

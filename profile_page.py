@@ -14,9 +14,12 @@ def get_profile_view(page: ft.Page, user_name="User"):
     AMBER     = "#f59e0b"
 
     db_config = {
-        "host": "localhost", "user": "root",
-        "password": "venera123!@ZX", "database": "money_tracker_v2",
-    }
+    "host":     "mysql.railway.internal",
+    "user":     "root",
+    "password": "FVmxLAOaqcNqRodWzphRlFoRnmWrsdwq",
+    "database": "railway",
+    "port":     3306,
+}
 
     state = {"goals": [], "selected_tab": 0}
 

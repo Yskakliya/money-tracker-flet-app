@@ -28,8 +28,11 @@ def get_calendar_view(page: ft.Page, user_name="User"):
         return _cat_color_cache[name]
 
     db_config = {
-        "host": "localhost", "user": "root",
-        "password": "venera123!@ZX", "database": "money_tracker_v2",
+        "host":     "mysql.railway.internal",
+    "user":     "root",
+    "password": "FVmxLAOaqcNqRodWzphRlFoRnmWrsdwq",
+    "database": "railway",
+    "port":     3306,
     }
 
     if not hasattr(page, "current_date"):

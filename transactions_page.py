@@ -19,8 +19,11 @@ def get_transactions_view(page: ft.Page, user_name="User"):
     }
 
     db_config = {
-        "host": "localhost", "user": "root",
-        "password": "venera123!@ZX", "database": "money_tracker_v2",
+        "host":     "mysql.railway.internal",
+        "user":     "root",
+        "password": "FVmxLAOaqcNqRodWzphRlFoRnmWrsdwq",
+        "database": "railway",
+        "port":     3306,
     }
 
     # State
@@ -213,7 +216,6 @@ def get_transactions_view(page: ft.Page, user_name="User"):
             controls=[
                 ft.Container(
                     content=ft.Column([
-                        
                         ft.Row([
                             ft.Column([
                                 ft.Text("Transaction History", size=26, weight="bold", color="white"),

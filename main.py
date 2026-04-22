@@ -12,10 +12,11 @@ from notifications import check_and_notify_budgets
 
 
 DB_CONFIG = {
-    "host":     "localhost",
+    "host":     "mysql.railway.internal",
     "user":     "root",
-    "password": "venera123!@ZX",
-    "database": "money_tracker_v2",
+    "password": "FVmxLAOaqcNqRodWzphRlFoRnmWrsdwq",
+    "database": "railway",
+    "port":     3306,
 }
 
 

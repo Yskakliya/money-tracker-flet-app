@@ -28,10 +28,11 @@ def get_dashboard_view(page: ft.Page, user_name="User"):
     }
 
     db_config = {
-        "host":     "localhost",
+        "host":     "mysql.railway.internal",
         "user":     "root",
-        "password": "venera123!@ZX",
-        "database": "money_tracker_v2",
+        "password": "FVmxLAOaqcNqRodWzphRlFoRnmWrsdwq",
+        "database": "railway",
+        "port":     3306,
     }
 
     def load_db_data():
@@ -385,7 +386,6 @@ def get_dashboard_view(page: ft.Page, user_name="User"):
                         ),
                     ]
                 ),
-
                 ft.Container(get_daily_chart(), height=240),
             ],
             spacing=14,
