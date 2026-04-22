@@ -20,11 +20,23 @@ def get_profile_view(page: ft.Page, user_name="User"):
 
     state = {"goals": [], "selected_tab": 0}
 
-    # ── FIX: coerce all MySQL Decimal/None values to plain float ──────────────
+    # ── Load & coerce all MySQL Decimal/None → float ──────────────────────────
     def load_db_data():
         try:
             db = mysql.connector.connect(**db_config)
             cursor = db.cursor(dictionary=True)
+
+            # Guarantee a profile row always exists for this user
+            cursor.execute(
+                """
+                INSERT INTO user_profile (user_name, salary, savings, deposit_percent, total_saved)
+                VALUES (%s, 0, 0, 0, 0)
+                ON DUPLICATE KEY UPDATE user_name = user_name
+                """,
+                (user_name,),
+            )
+            db.commit()
+
             cursor.execute("SELECT * FROM user_profile WHERE user_name=%s", (user_name,))
             row = cursor.fetchone()
             profile = {
@@ -33,16 +45,17 @@ def get_profile_view(page: ft.Page, user_name="User"):
                 "deposit_percent": float(row["deposit_percent"] or 0) if row else 0,
                 "total_saved":     float(row["total_saved"]     or 0) if row else 0,
             }
+
             cursor.execute("SELECT * FROM user_goals WHERE user_name=%s", (user_name,))
             goals = cursor.fetchall()
-            # Coerce Decimal fields in every goal row
             for g in goals:
                 g["goal_price"]   = float(g.get("goal_price")   or 0)
                 g["saved_amount"] = float(g.get("saved_amount") or 0)
+
             db.close()
             return profile, goals
         except Exception as e:
-            print(e)
+            print("load_db_data error:", e)
             return {"salary": 0, "savings": 0, "deposit_percent": 0, "total_saved": 0}, []
 
     profile, state["goals"] = load_db_data()
@@ -67,9 +80,7 @@ def get_profile_view(page: ft.Page, user_name="User"):
     txt_projection = ft.Text("$0", size=30, weight="bold", color=PRIMARY)
     txt_free       = ft.Text("Free: $0", color="lightgreen", size=13)
     txt_goals_val  = ft.Text("In Goals: $0", color=AMBER, size=13)
-
-    # ── FIX: initialise balance display from DB value, not hardcoded $0 ───────
-    txt_balance = ft.Text(
+    txt_balance    = ft.Text(
         f"${profile['total_saved']:,.0f}",
         size=20, color="white", weight="bold",
     )
@@ -95,13 +106,18 @@ def get_profile_view(page: ft.Page, user_name="User"):
     tf_savings.on_change     = recalc
     tf_percent.on_change     = recalc
 
+    # ── FIX: INSERT ... ON DUPLICATE KEY UPDATE so data is always written ─────
     def save(field, value):
         try:
             db = mysql.connector.connect(**db_config)
             cursor = db.cursor()
             cursor.execute(
-                f"UPDATE user_profile SET {field}=%s WHERE user_name=%s",
-                (value, user_name),
+                f"""
+                INSERT INTO user_profile (user_name, {field})
+                VALUES (%s, %s)
+                ON DUPLICATE KEY UPDATE {field} = VALUES({field})
+                """,
+                (user_name, value),
             )
             db.commit()
             db.close()
@@ -222,7 +238,6 @@ def get_profile_view(page: ft.Page, user_name="User"):
             db.commit()
             cursor.execute("SELECT * FROM user_goals ORDER BY id DESC LIMIT 1")
             new_goal = cursor.fetchone()
-            # Coerce the new row too
             new_goal["goal_price"]   = float(new_goal.get("goal_price")   or 0)
             new_goal["saved_amount"] = float(new_goal.get("saved_amount") or 0)
             state["goals"].append(new_goal)
@@ -234,7 +249,7 @@ def get_profile_view(page: ft.Page, user_name="User"):
         except Exception as ex:
             print("add_goal error:", ex)
 
-    # ── Run recalc once so all display widgets show correct values on load ─────
+    # Run recalc once so all display widgets show correct values immediately on load
     recalc()
 
     def card(title, content, icon=None):
