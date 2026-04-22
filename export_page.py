@@ -130,7 +130,7 @@ def get_export_view(page: ft.Page, user_name="User"):
         wb.save(fname)
 
         progress_bar.visible = False
-        set_status(f"✓ Excel saved to Desktop: {os.path.basename(fname)}", PRIMARY)
+        set_status(f"Excel saved to Desktop: {os.path.basename(fname)}", PRIMARY)
 
     def export_pdf(e):
         try:
@@ -252,7 +252,7 @@ def get_export_view(page: ft.Page, user_name="User"):
         doc.build(story)
 
         progress_bar.visible = False
-        set_status(f"✓ PDF saved to Desktop: {os.path.basename(fname)}", PRIMARY)
+        set_status(f"PDF saved to Desktop: {os.path.basename(fname)}", PRIMARY)
 
     # ── UI ────────────────────────────────────────────────────────────────────
     def export_card(icon, title, subtitle, btn_label, btn_color, action):

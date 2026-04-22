@@ -281,7 +281,7 @@ def main(page: ft.Page):
             )
             db.commit()
             db.close()
-            page.snack_bar = ft.SnackBar(ft.Text("✓ Account created! Please login."), bgcolor="#198754")
+            page.snack_bar = ft.SnackBar(ft.Text("Account created! Please login."), bgcolor="#198754")
             page.snack_bar.open = True
             switch_view(None)
             page.update()

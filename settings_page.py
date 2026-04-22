@@ -80,7 +80,7 @@ def get_settings_view(page: ft.Page, user_name="User", on_logout=None):
             current_pw.value = ""
             new_pw.value     = ""
             confirm_pw.value = ""
-            status_text.value = "✓ Password updated successfully"
+            status_text.value = "Password updated successfully"
             status_text.color = PRIMARY
             page.snack_bar = ft.SnackBar(ft.Text("Password changed!"), bgcolor=PRIMARY)
             page.snack_bar.open = True
@@ -119,7 +119,7 @@ def get_settings_view(page: ft.Page, user_name="User", on_logout=None):
             cursor.execute("UPDATE user_budgets SET spent_amount=0 WHERE user_name=%s", (user_name,))
             db.commit()
             db.close()
-            status_text.value = "✓ All transaction data cleared"
+            status_text.value = "All transaction data cleared"
             status_text.color = PRIMARY
             page.snack_bar = ft.SnackBar(ft.Text("Data cleared"), bgcolor=PRIMARY)
             page.snack_bar.open = True

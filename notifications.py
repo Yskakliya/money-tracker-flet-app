@@ -1,8 +1,3 @@
-"""
-notifications.py — System notification helper for Money Tracker
-Uses plyer for cross-platform OS notifications (Windows/Mac/Linux).
-"""
-
 import os
 
 
@@ -36,12 +31,12 @@ def notify_budget_warning(category: str, pct: float, spent: float, limit: float)
     """Fire when a category reaches >= 85% of its budget."""
     if pct >= 1.0:
         _send(
-            title=" Budget Exceeded!",
+            title="Budget Exceeded!",
             message=f"{category}: ${spent:,.0f} spent — OVER limit of ${limit:,.0f}",
         )
     else:
         _send(
-            title=" Budget Warning",
+            title="Budget Warning",
             message=f"{category}: {pct*100:.0f}% used (${spent:,.0f} / ${limit:,.0f})",
         )
 
@@ -49,7 +44,7 @@ def notify_budget_warning(category: str, pct: float, spent: float, limit: float)
 def notify_transaction_saved(category: str, amount: float):
     """Fire after a transaction is saved successfully."""
     _send(
-        title=" Transaction Saved",
+        title="Transaction Saved",
         message=f"${amount:,.2f} added to {category}",
     )
 
@@ -58,7 +53,7 @@ def notify_export_done(file_path: str):
     """Fire after an export is completed."""
     filename = os.path.basename(file_path)
     _send(
-        title=" Export Complete",
+        title="Export Complete",
         message=f"Saved: {filename}",
     )
 

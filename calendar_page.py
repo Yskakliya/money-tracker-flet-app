@@ -265,7 +265,7 @@ def get_calendar_view(page: ft.Page, user_name="User"):
             cell.update()
 
             page.snack_bar = ft.SnackBar(
-                ft.Text(f"✓ ${val:.0f} added to {cat_name}"), bgcolor=PRIMARY
+                ft.Text(f"${val:.0f} added to {cat_name}"), bgcolor=PRIMARY
             )
             page.snack_bar.open = True
             page.update()

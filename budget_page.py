@@ -186,7 +186,7 @@ def get_budget_view(page: ft.Page, user_name="User"):
                             expand=True
                         ),
                         ft.TextButton(
-                            "✕",
+                            "X",
                             on_click=lambda e, bid=item['id']: delete_budget(bid),
                             style=ft.ButtonStyle(color="#e74c3c")
                         )

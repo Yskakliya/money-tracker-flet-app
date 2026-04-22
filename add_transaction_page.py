@@ -173,7 +173,7 @@ def get_add_transaction_view(page: ft.Page, user_name="User", on_saved=None):
             selected_date["value"] = date.today()
             date_text.value = date.today().strftime("%d %B %Y")
 
-            success_text.value   = f"✓ ${amt:,.2f} added to {cat_name}!"
+            success_text.value   = f"${amt:,.2f} added to {cat_name}!"
             success_text.visible = True
 
             page.snack_bar = ft.SnackBar(
