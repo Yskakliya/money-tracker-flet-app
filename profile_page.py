@@ -106,19 +106,24 @@ def get_profile_view(page: ft.Page, user_name="User"):
     tf_savings.on_change     = recalc
     tf_percent.on_change     = recalc
 
-    # ── FIX: INSERT ... ON DUPLICATE KEY UPDATE so data is always written ─────
     def save(field, value):
         try:
             db = mysql.connector.connect(**db_config)
             cursor = db.cursor()
             cursor.execute(
-                f"""
-                INSERT INTO user_profile (user_name, {field})
-                VALUES (%s, %s)
-                ON DUPLICATE KEY UPDATE {field} = VALUES({field})
-                """,
-                (user_name, value),
+                "SELECT COUNT(*) FROM user_profile WHERE user_name=%s", (user_name,)
             )
+            exists = cursor.fetchone()[0]
+            if exists:
+                cursor.execute(
+                    f"UPDATE user_profile SET {field}=%s WHERE user_name=%s",
+                    (value, user_name),
+                )
+            else:
+                cursor.execute(
+                    f"INSERT INTO user_profile (user_name, {field}) VALUES (%s, %s)",
+                    (user_name, value),
+                )
             db.commit()
             db.close()
         except Exception as ex:
