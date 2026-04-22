@@ -13,9 +13,14 @@ def get_profile_view(page: ft.Page, user_name="User"):
     BLUE      = "#3b82f6"
     AMBER     = "#f59e0b"
 
+    import os
+
     db_config = {
-        "host": "localhost", "user": "root",
-        "password": "venera123!@ZX", "database": "money_tracker_v2",
+       "host":     os.environ.get("MYSQLHOST",     "localhost"),
+       "port":     int(os.environ.get("MYSQLPORT", 3306)),
+       "user":     os.environ.get("MYSQLUSER",     "root"),
+       "password": os.environ.get("MYSQLPASSWORD", "venera123!@ZX"),
+      "database": os.environ.get("MYSQLDATABASE", "money_tracker_v2"),
     }
 
     state = {"goals": [], "selected_tab": 0}
