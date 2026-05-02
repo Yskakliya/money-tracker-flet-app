@@ -1,5 +1,6 @@
 import flet as ft
 import mysql.connector
+from datetime import datetime
 from calendar_page import get_calendar_view
 from budget_page import get_budget_view
 from dashboard_page import get_dashboard_view
@@ -108,11 +109,37 @@ def main(page: ft.Page):
         update_active_nav(route)
         page.update()
 
+    def reset_budgets_if_new_month(user_name):
+        try:
+            db = db_connect()
+            cursor = db.cursor(dictionary=True)
+            cursor.execute(
+                "SELECT reset_month FROM user_budgets WHERE user_name=%s LIMIT 1",
+                (user_name,)
+            )
+            row = cursor.fetchone()
+            current_month = datetime.now().strftime("%Y-%m")
+            if row is None or row.get("reset_month") != current_month:
+                cursor.execute(
+                    "UPDATE user_budgets SET spent_amount=0, reset_month=%s WHERE user_name=%s",
+                    (current_month, user_name)
+                )
+                db.commit()
+                print(f"Budgets reset for {user_name} — new month: {current_month}")
+            db.close()
+        except Exception as e:
+            print(f"Reset error: {e}")
+
     def show_main_layout(user_name="User"):
         _current_user["name"] = user_name
         page.clean()
         page.vertical_alignment   = ft.MainAxisAlignment.START
         page.horizontal_alignment = ft.CrossAxisAlignment.START
+
+        try:
+            reset_budgets_if_new_month(user_name)
+        except Exception as e:
+            print(f"Reset error: {e}")
 
         try:
             check_and_notify_budgets(DB_CONFIG, user_name)
@@ -188,7 +215,6 @@ def main(page: ft.Page):
     import re
 
     def validate_email(email: str) -> str | None:
-        """Returns error message or None if valid."""
         if not email:
             return "Email is required"
         pattern = r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'
@@ -197,7 +223,6 @@ def main(page: ft.Page):
         return None
 
     def validate_password(password: str, is_signup: bool) -> str | None:
-        """Returns error message or None if valid."""
         if not password:
             return "Password is required"
         if is_signup:
